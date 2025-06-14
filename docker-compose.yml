@@ -18,6 +18,23 @@ services:
       - '3000:3000'
     networks:
       - mongodb-network
+  
+  billing:
+    build:
+      context: .
+      dockerfile: ./apps/billing/Dockerfile
+      target: development
+    command: npm run start:dev billing
+    env_file:
+      - ./apps/billing/.env
+    depends_on:
+      - mongodb-primary
+      - mongodb-secondary
+      - mongodb-arbiter
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
 
   mongodb-primary:
     image: docker.io/bitnami/mongodb:8.0
@@ -46,6 +63,11 @@ services:
     networks:
       - mongodb-network
 
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - '5672:5672'
+
   mongodb-arbiter:
     image: docker.io/bitnami/mongodb:8.0
     depends_on:
@@ -59,18 +81,21 @@ services:
     networks:
       - mongodb-network
 
-  adminer:
+  mongo-express:
     image: mongo-express
     restart: always
     ports:
       - "8081:8081"
     environment:
+      # MongoDB Connection
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: password123
       ME_CONFIG_MONGODB_SERVER: mongodb-primary
       ME_CONFIG_MONGODB_PORT: 27017
-      ME_CONFIG_BASICAUTH_USERNAME: "admin"
-      ME_CONFIG_BASICAUTH_PASSWORD: "pass"
+
+      # Web UI Authentication (CHANGE THESE!)
+      ME_CONFIG_BASICAUTH_USERNAME: "mongoadmin"  # Custom username
+      ME_CONFIG_BASICAUTH_PASSWORD: "SecurePass123!" # Strong password
     depends_on:
       - mongodb-primary
     networks:
