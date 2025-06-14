@@ -1,12 +1,14 @@
+import * as Joi from "joi";
+
 import { DatabaseModule } from "@app/common";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { MongooseModule } from "@nestjs/mongoose";
-import * as Joi from "joi";
-import { OrdersController } from "./orders.controller";
-import { OrdersRepository } from "./orders.repository";
-import { OrdersService } from "./orders.service";
-import { Order, orderSchema } from "./schemas/order.schema";
+
+import { OrdersController } from "@app/orders/orders.controller";
+import { OrdersRepository } from "@app/orders/orders.repository";
+import { OrdersService } from "@app/orders/orders.service";
+import { Order, orderSchema } from "@app/orders/schemas/order.schema";
 
 @Module({
   imports: [

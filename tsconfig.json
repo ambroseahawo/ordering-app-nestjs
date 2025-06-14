@@ -23,6 +23,24 @@
       ],
       "@app/common/*": [
         "libs/common/src/*"
+      ],
+      "@app/orders": [
+        "apps/orders/src"
+      ],
+      "@app/orders/*": [
+        "apps/orders/src/*"
+      ],
+      "@app/auth": [
+        "apps/auth/src"
+      ],
+      "@app/auth/*": [
+        "apps/auth/src/*"
+      ],
+      "@app/billing": [
+        "apps/billing/src"
+      ],
+      "@app/billing/*": [
+        "apps/billing/src/*"
       ]
     }
   }
