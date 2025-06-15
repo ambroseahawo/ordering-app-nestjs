@@ -11,6 +11,7 @@ services:
       - mongodb-primary
       - mongodb-secondary
       - mongodb-arbiter
+      - rabbitmq
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -18,6 +19,7 @@ services:
       - '3000:3000'
     networks:
       - mongodb-network
+      - rabbitmq-network
   
   billing:
     build:
@@ -35,6 +37,9 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+    networks:
+      - mongodb-network
+      - rabbitmq-network
 
   mongodb-primary:
     image: docker.io/bitnami/mongodb:8.0
@@ -67,6 +72,8 @@ services:
     image: rabbitmq
     ports:
       - '5672:5672'
+    networks:
+      - rabbitmq-network
 
   mongodb-arbiter:
     image: docker.io/bitnami/mongodb:8.0
@@ -107,4 +114,6 @@ volumes:
 
 networks:
   mongodb-network:
+    driver: bridge
+  rabbitmq-network:
     driver: bridge
